@@ -3,6 +3,7 @@ env.config();
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
+import fs from 'fs';
 
 import upload from './config/upload';
 import errorHandler from './middlewares/errorHandler';
@@ -20,7 +21,18 @@ app.use(express.json());
 app.use('/models', express.static(upload.directory.modelsFolder));
 
 app.post('/upload', uploadMiddleware.single('file'), (request, response) => {
-  return response.json(`http://localhost:3333/models/${request.file_url}`);
+  response.json(`${request.file_url}`);
+
+  setTimeout(() => {
+    return fs.unlink(
+      `${upload.directory.modelsFolder}/${request.file_url}`,
+      err => {
+        if (err) {
+          console.log(err);
+        }
+      },
+    );
+  }, 10000);
 });
 
 app.use(errorHandler);

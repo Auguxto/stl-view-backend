@@ -18,7 +18,7 @@ export default {
     file: Express.Multer.File,
     callback: FileFilterCallback,
   ) => {
-    const allowedMimes = ['model/stl'];
+    const allowedMimes = ['model/stl', 'application/octet-stream'];
 
     if (allowedMimes.includes(file.mimetype)) {
       callback(null, true);
